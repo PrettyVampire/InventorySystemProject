@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ItemUI : MonoBehaviour {
 
-#region 数据
-    public Item m_item { get; set; }
-	public int m_amount { get; set; }
-#endregion
+    #region item数据
+    public Item m_item { get; private set; }
+	public int m_amount { get; private set; }
+    #endregion
 
 
     #region 防止未初始化，就直接调用导致异常 ui组件
@@ -39,11 +39,26 @@ public class ItemUI : MonoBehaviour {
     }
     #endregion
 
+    private Vector3 m_targetScale = new Vector3(0.65f, 0.65f, 0.65f);
+    private Vector3 m_animationScale = Vector3.one;
+    private float m_smoothing = 5f;
 
     private void Start()
     {
         m_text = GetComponentInChildren<Text>();
         m_image = GetComponent<Image>();
+    }
+
+    private void Update()
+    {
+        if (transform.lossyScale.x != m_targetScale.x)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, m_targetScale, m_smoothing * Time.deltaTime);
+            if (Mathf.Abs(transform.lossyScale.x - m_targetScale.x) <= 0.02f)
+            {
+                transform.localScale = m_targetScale;
+            }
+        }
     }
 
     public void SetItem(Item item, int amount = 1)
@@ -61,9 +76,8 @@ public class ItemUI : MonoBehaviour {
         {
             amountText.text = "";
         }
+        transform.localScale = this.m_animationScale;
     }
-    
-
     public void AddAmount(int amount = 1)
     {
         this.m_amount += amount;
@@ -75,11 +89,21 @@ public class ItemUI : MonoBehaviour {
         {
             amountText.text = "";
         }
+        transform.localScale = this.m_animationScale;
+
     }
     public void ReduceAmount(int amount)
     {
         this.m_amount -= amount;
-        amountText.text = this.m_amount.ToString();
+        if (m_item.m_capacity > 1)
+        {
+            amountText.text = this.m_amount.ToString();
+        }
+        else
+        {
+            amountText.text = "";
+        }
+        transform.localScale = this.m_animationScale;
 
     }
 

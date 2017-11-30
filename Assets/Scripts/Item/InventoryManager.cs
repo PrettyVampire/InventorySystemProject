@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    //鼠标是否有物品
+    //鼠标上是否有物品
     private bool m_isPickedItem = false;
     public bool IsPickedItem
     {
@@ -64,6 +64,9 @@ public class InventoryManager : MonoBehaviour
             m_isPickedItem = value;
         }
     }
+
+    //
+    public Slot m_changeSlot = null;
     #endregion
 
 
@@ -83,7 +86,7 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (m_isPickedItem)
+        if (m_isPickedItem && m_pickedItem)
         {
             Vector2 position;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_canvas.transform as RectTransform, Input.mousePosition, null, out position);
@@ -96,7 +99,6 @@ public class InventoryManager : MonoBehaviour
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_canvas.transform as RectTransform, Input.mousePosition, null, out position);
             m_toolTip.SetLocalPosition(position + new Vector2(10, -10));
         }
-        
     }
 
 
@@ -182,7 +184,7 @@ public class InventoryManager : MonoBehaviour
 
     public void ShowToolTip(string content)
     {
-      //  if(!m_isPickedItem)
+        if(!m_isPickedItem)
         {
             m_toolTip.Show(content);
             m_isToolTipShow = true;
@@ -203,6 +205,32 @@ public class InventoryManager : MonoBehaviour
         m_pickedItem.Show();
 
         m_toolTip.Hide();
+    }
+
+    public void RemoveItemByAmount(int amount)
+    {
+        PickedItem.ReduceAmount(amount);
+        if(PickedItem.m_amount <= 0)
+        {
+            PickedItem.Hide();
+            m_isPickedItem = false;
+        }
+    }
+
+    public void PutDownItem()
+    {
+        m_isPickedItem = false;
+        m_pickedItem.Hide();
+
+    }
+
+    public void ExchangeItem(ItemUI targetItemUI)
+    {
+        m_changeSlot.StoreItem(targetItemUI.m_item, targetItemUI.m_amount);
+        targetItemUI.SetItem(m_pickedItem.m_item, m_pickedItem.m_amount);
+
+        m_isPickedItem = false;
+        m_pickedItem.Hide();
     }
 }
 
