@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class ItemUI : MonoBehaviour {
 
     #region item数据
@@ -70,6 +71,10 @@ public class ItemUI : MonoBehaviour {
         itemImage.sprite = Resources.Load<Sprite>(m_item.m_sprite);
         if(m_item.m_capacity > 1)
         {
+            if (m_amount > m_item.m_capacity)
+            {
+                m_amount = m_item.m_capacity;
+            }
             amountText.text = this.m_amount.ToString();
         }
         else
@@ -83,6 +88,10 @@ public class ItemUI : MonoBehaviour {
         this.m_amount += amount;
         if (m_item.m_capacity > 1)
         {
+            if(m_amount > m_item.m_capacity)
+            {
+                m_amount = m_item.m_capacity;
+            }
             amountText.text = this.m_amount.ToString();
         }
         else
@@ -104,7 +113,6 @@ public class ItemUI : MonoBehaviour {
             amountText.text = "";
         }
         transform.localScale = this.m_animationScale;
-
     }
 
     public void Show()

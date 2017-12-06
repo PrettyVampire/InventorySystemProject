@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using LitJson;
@@ -74,6 +75,10 @@ public class InventoryManager : MonoBehaviour
     private List<Item> m_itemList;
 
 
+    private void Awake()
+    {
+        ParseItemJson();
+    }
 
     private void Start()
     {
@@ -81,23 +86,31 @@ public class InventoryManager : MonoBehaviour
         m_canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         m_pickedItem = GameObject.Find("PickedItem").GetComponent<ItemUI>();
         GameObject.Find("PickedItem").active = false;
-        ParseItemJson();
+        
     }
 
     private void Update()
     {
-        if (m_isPickedItem && m_pickedItem)
+        //鼠标捡起的物品跟随移动
+        if (m_isPickedItem)
         {
             Vector2 position;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_canvas.transform as RectTransform, Input.mousePosition, null, out position);
             m_pickedItem.SetLocalPosition(position);
         }
         //控制面板跟随鼠标移动
-        if (m_isToolTipShow && !m_isPickedItem)
+        else if (m_isToolTipShow)
         {
             Vector2 position;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(m_canvas.transform as RectTransform, Input.mousePosition, null, out position);
             m_toolTip.SetLocalPosition(position + new Vector2(10, -10));
+        }
+
+        //丢弃物品   手上有物品、按下左键、鼠标下没有任何物品
+        //UnityEngine.EventSystems.EventSystem 事件系统
+        if (m_isPickedItem && Input.GetKeyDown(KeyCode.Mouse0) && !EventSystem.current.IsPointerOverGameObject(-1))
+        {
+            this.ThrowPickedItem();
         }
     }
 
@@ -232,5 +245,38 @@ public class InventoryManager : MonoBehaviour
         m_isPickedItem = false;
         m_pickedItem.Hide();
     }
+
+    //扔掉物品
+    public void ThrowPickedItem()
+    {
+        m_pickedItem.Hide();
+        m_isPickedItem = false;
+    }
+
+    public void SaveInventory()
+    {
+        Character.Instance.SaveInventory();
+        Chest.Instance.SaveInventory();
+        Forget.Instance.SaveInventory();
+        Knapsack.Instance.SaveInventory();
+        Vender.Instance.SaveInventory();
+
+        PlayerPrefs.SetFloat("coinAmount", GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CoinAmount);
+    }
+
+    public void LoadInventory()
+    {
+        Character.Instance.LoadInventory();
+        Chest.Instance.LoadInventory();
+        Forget.Instance.LoadInventory();
+        Knapsack.Instance.LoadInventory();
+        Vender.Instance.LoadInventory();
+
+        if(PlayerPrefs.HasKey("coinAmount"))
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CoinAmount = PlayerPrefs.GetFloat("coinAmount");
+        }
+    }
+    
 }
 

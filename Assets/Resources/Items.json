@@ -120,23 +120,7 @@
     },
     {
         "id": 9,
-        "name": "手套",
-        "type": "Equipment",
-        "quality": "Common",
-        "description": "提高攻速",
-        "capacity": 1,
-        "buyprice": 100,
-        "sellprice": 80,
-        "sprite": "Sprites/Items/gloves",
-        "strength":2,
-        "intellect":4,
-        "agility":10,
-        "stamina":10,
-        "equipType":"offhand"
-    },
-    {
-        "id": 9,
-        "name": "头盔",
+        "name": "锻造的头盔",
         "type": "Equipment",
         "quality": "Common",
         "description": "万磁王专用",
@@ -216,7 +200,7 @@
     },
 	{
         "id": 14,
-        "name": "斧子",
+        "name": "锻造而成的开天斧",
         "type": "Weapon",
         "quality": "Common",
         "description": "提升100点攻击",
@@ -253,9 +237,24 @@
         "damage":50,
         "weaponType":"mainHand"
     },
-    {
+	{
         "id": 17,
-        "name": "斧子铁块",
+        "name": "手套",
+        "type": "Weapon",
+        "quality": "Common",
+        "description": "提高攻速",
+        "capacity": 1,
+        "buyprice": 100,
+        "sellprice": 80,
+        "sprite": "Sprites/Items/gloves",
+        "strength":2,
+        "intellect":4,
+        "damage":50,
+        "weaponType":"offHand"
+    },
+    {
+        "id": 18,
+        "name": "铁块",
         "type": "Material",
         "quality": "Legendary",
         "description": "铁矿石极其罕见",
@@ -265,7 +264,7 @@
         "sprite": "Sprites/Items/ingots"
     },
     {
-        "id": 18,
+        "id": 19,
         "name": "钻石",
         "type": "Material",
         "quality": "Artifact",

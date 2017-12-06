@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/// <summary>
+/// 显示物品信息
+/// </summary>
 public class ToolTip : MonoBehaviour {
 
     private Text m_tooTipText;
@@ -24,6 +28,10 @@ public class ToolTip : MonoBehaviour {
 		if(m_canvasGroup.alpha != m_targetAlpha)
         {
             m_canvasGroup.alpha = Mathf.Lerp(m_canvasGroup.alpha, m_targetAlpha, m_smoothing * Time.deltaTime);
+            if(Mathf.Abs(m_canvasGroup.alpha - m_targetAlpha) < 0.02f)
+            {
+                m_canvasGroup.alpha = m_targetAlpha;
+            }
         }
 	}
 

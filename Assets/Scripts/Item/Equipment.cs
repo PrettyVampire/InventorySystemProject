@@ -40,7 +40,8 @@ public class Equipment : Item {
         trinket,//饰品
         shoulder,//肩膀
         belt,//腰带
-        offhand//副手
+        offhand,//副手
+        none
     }
 
     public override string GetToolTipText()

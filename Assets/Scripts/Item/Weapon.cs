@@ -26,7 +26,8 @@ public class Weapon : Item {
     public enum WeaponType
     {
         offHand,
-        mainHand
+        mainHand,
+        none
     }
 
     public override string GetToolTipText()
